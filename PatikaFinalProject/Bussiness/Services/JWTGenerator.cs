@@ -22,7 +22,8 @@ namespace PatikaFinalProject.Bussiness.Services
 
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, "Member") };
+            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, "Member"), 
+                                                     new Claim(ClaimTypes.Role, "Admin") };
     
             JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(100), signingCredentials: credentials);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();

@@ -3,48 +3,33 @@ using PatikaFinalProject.DataAccess;
 
 namespace PatikaFinalProject.Services.Mapper
 {
-    public class CustomerProfile : Profile
+    public class ShoppingListProfile : Profile
     {
-        public CustomerProfile()
+        public ShoppingListProfile()
         {
-            CreateMap<Customer, CustomerCreateDTO>().ReverseMap();
+            CreateMap<ShoppingList, ShoppingListDTO>().ReverseMap();
+            CreateMap<ShoppingList, ShoppingListCreateDTO>().ReverseMap();
+            CreateMap<ShoppingListDTO, ShoppingListCreateDTO>().ReverseMap();
         }
     }
 
-    public class ActorProfile : Profile
+    public class CategoryProfile : Profile
     {
-        public ActorProfile()
+        public CategoryProfile()
         {
-            CreateMap<Actor, ActorCreateDTO>().ReverseMap();
-            CreateMap<Actor, ActorDTO>().ReverseMap();
-            CreateMap<ActorDTO, ActorCreateDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryCreateDTO>().ReverseMap();
+            CreateMap<CategoryDTO, CategoryCreateDTO>().ReverseMap();
         }
     }
 
-    public class DirectorProfile : Profile
+    public class ProductProfile : Profile
     {
-        public DirectorProfile()
+        public ProductProfile()
         {
-            CreateMap<Director, DirectorCreateDTO>().ReverseMap();
-            CreateMap<Director, DirectorDTO>().ReverseMap();
-            CreateMap<DirectorDTO, DirectorCreateDTO>().ReverseMap();
-        }
-    }
-
-    public class MovieProfile : Profile
-    {
-        public MovieProfile()
-        {
-            CreateMap<Movie, MovieDTO>().ReverseMap();
-            CreateMap<Movie, MovieCreateDTO>().ReverseMap();
-            CreateMap<MovieDTO, MovieCreateDTO>().ReverseMap();
-        }
-    }
-    public class OrderMovieProfile : Profile
-    {
-        public OrderMovieProfile()
-        {
-            CreateMap<Order, OrderCreateDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<Product, ProductCreateDTO>().ReverseMap();
+            CreateMap<ProductDTO, ProductCreateDTO>().ReverseMap();
         }
     }
 }
