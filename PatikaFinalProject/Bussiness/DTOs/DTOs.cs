@@ -10,7 +10,7 @@ namespace PatikaFinalProject.DataAccess
 
         public Category? Category { get; set; }
 
-        public ICollection<Product>? ProductList { get; set; }
+        public List<Product>? ProductList { get; set; }
 
         public bool isBought { get; set; }
         public DateTime CreationDate { get; set; }
