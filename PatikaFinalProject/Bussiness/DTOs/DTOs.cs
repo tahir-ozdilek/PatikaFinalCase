@@ -7,11 +7,8 @@ namespace PatikaFinalProject.DataAccess
     public class ShoppingListDTO
     {
         public int ID { get; set; }
-
         public Category? Category { get; set; }
-
         public List<Product>? ProductList { get; set; }
-
         public bool isBought { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime CompletedDate { get; set; }
@@ -27,11 +24,7 @@ namespace PatikaFinalProject.DataAccess
     public class CategoryDTO
     {
         public int ID { get; set; }
-
-        [ForeignKey("ShoppingList")]
         public int ShoppingListID { get; set; }
-        //[ForeignKey("ShoppingListID")]
-        public ShoppingList ShoppingList { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
@@ -45,12 +38,7 @@ namespace PatikaFinalProject.DataAccess
     public class ProductDTO
     {
         public int ID { get; set; }
-
-        [ForeignKey("ShoppingList")]
         public int ShoppingListID { get; set; }
-        //[ForeignKey("ShoppingListID")]
-        public ShoppingList ShoppingList { get; set; }
-
         public string Name { get; set; }
         public string Unit { get; set; }
         public int Amount { get; set; }

@@ -57,7 +57,20 @@ namespace PatikaFinalProject.Bussiness.Services
                 await dbContext.SaveChangesAsync();
                 return new Response(ResponseType.Success);
             }
-            return new Response(ResponseType.NotFound, $"{id} ye ait data bulunamadı");
+            return new Response(ResponseType.NotFound, "Not Found");
+        }
+        
+        public async Task<IResponse<ShoppingListDTO>> GetSingle(int id)
+        {
+            ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id);
+
+            if(shoppingList == null)
+            {
+                new Response<ShoppingListDTO>(ResponseType.NotFound, "Not Found");
+            }
+
+            ShoppingListDTO data = mapper.Map<ShoppingListDTO>(shoppingList);
+            return new Response<ShoppingListDTO>(ResponseType.Success, data);
         }
 
         public async Task<IResponse<List<ShoppingListDTO>>> GetAll()
@@ -80,7 +93,7 @@ namespace PatikaFinalProject.Bussiness.Services
                     await dbContext.SaveChangesAsync();
                     return new Response<ShoppingListDTO>(ResponseType.Success, dto);
                 }
-                return new Response<ShoppingListDTO>(ResponseType.NotFound, $"{dto.ID} ye ait data bulunamadı");
+                return new Response<ShoppingListDTO>(ResponseType.NotFound, "Not Found");
             }
             else
             {

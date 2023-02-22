@@ -27,7 +27,8 @@ namespace PatikaFinalProject.Common
             services.AddSingleton(mapper);
             services.AddDbContext<MyDbContext>(opt =>
             {
-                opt.UseSqlServer("Data Source=TR33NBK161\\MSSQLSERVER01; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;"); 
+                //opt.UseSqlServer("Data Source=TR33NBK161\\MSSQLSERVER01; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;"); 
+                opt.UseSqlServer("Data Source=Dell; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;"); 
                 opt.LogTo(Console.WriteLine, LogLevel.Information);
             });
             services.AddSingleton(mapper);
