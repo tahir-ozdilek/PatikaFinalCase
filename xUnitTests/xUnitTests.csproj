@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PatikaFinalProject\PatikaFinalProject.csproj" />
+    <ProjectReference Include="..\PatikaFinalProject\PatikaFinalCase.csproj" />
   </ItemGroup>
 
 </Project>

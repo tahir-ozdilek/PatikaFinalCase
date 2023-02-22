@@ -17,11 +17,9 @@ namespace PatikaFinalProject.Common
         public static void AddDependencies(this IServiceCollection services)
         {
             MapperConfiguration configuration = new MapperConfiguration(opt => {
-                                                                                    opt.AddProfile(new CustomerProfile());
-                                                                                    opt.AddProfile(new ActorProfile());
-                                                                                    opt.AddProfile(new DirectorProfile());
-                                                                                    opt.AddProfile(new MovieProfile());
-                                                                                    opt.AddProfile(new OrderMovieProfile());
+                                                                                    opt.AddProfile(new ShoppingListProfile());
+                                                                                    opt.AddProfile(new CategoryProfile());
+                                                                                    opt.AddProfile(new ProductProfile());
                                                                                 });
 
             IMapper mapper = configuration.CreateMapper();
@@ -29,24 +27,20 @@ namespace PatikaFinalProject.Common
             services.AddSingleton(mapper);
             services.AddDbContext<MyDbContext>(opt =>
             {
-                opt.UseSqlServer("Data Source=Dell; Initial Catalog=patikaFinalProject; Integrated Security=true; TrustServerCertificate=True;"); 
+                opt.UseSqlServer("Data Source=Dell; Initial Catalog=PatikaFinalCase; Integrated Security=true; TrustServerCertificate=True;"); 
                 opt.LogTo(Console.WriteLine, LogLevel.Information);
             });
             services.AddSingleton(mapper);
 
-            services.AddTransient<IValidator<CustomerCreateDTO>, CustomerCreateDTOValidator>();
-            services.AddTransient<IValidator<ActorDTO>, ActorDTOValidator>();
-            services.AddTransient<IValidator<ActorCreateDTO>, ActorCreateDTOValidator>();
-            services.AddTransient<IValidator<MovieDTO>, MovieDTOValidator>();
-            services.AddTransient<IValidator<MovieCreateDTO>, MovieCreateDTOValidator>();
-            services.AddTransient<IValidator<DirectorDTO>, DirectorDTOValidator>();
-            services.AddTransient<IValidator<DirectorCreateDTO>, DirectorCreateDTOValidator>();
+            services.AddTransient<IValidator<ShoppingListCreateDTO>, ShoppingListCreateDTOValidator>();
+            services.AddTransient<IValidator<ShoppingListDTO>, ShoppingListDTOValidator>();
+            services.AddTransient<IValidator<CategoryCreateDTO>, CategoryCreateDTOValidator>();
+            services.AddTransient<IValidator<CategoryDTO>, CategoryDTOValidator>();
+            services.AddTransient<IValidator<ProductCreateDTO>, ProductCreateDTOValidator>();
+            services.AddTransient<IValidator<ProductDTO>, ProductDTOValidator>();
+    
 
-            services.AddScoped<DirectorService, DirectorService>();
-            services.AddScoped<CustomerService, CustomerService>();
-            services.AddScoped<ActorService, ActorService>();
-            services.AddScoped<MovieService, MovieService>();
-            services.AddScoped<OrderMovieService, OrderMovieService>();
+            services.AddScoped<ShoppingListService, ShoppingListService>();
          
         }
     }
