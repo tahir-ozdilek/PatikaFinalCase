@@ -8,10 +8,8 @@ namespace PatikaFinalProject.DataAccess
     {
         public int ID { get; set; }
 
-        
         public Category? Category { get; set; }
 
-        //[ForeignKey("ShoppingListID")]
         public ICollection<Product>? ProductList { get; set; }
 
         public bool isBought { get; set; }
@@ -32,6 +30,7 @@ namespace PatikaFinalProject.DataAccess
 
         [ForeignKey("ShoppingList")]
         public int ShoppingListID { get; set; }
+        //[ForeignKey("ShoppingListID")]
         public ShoppingList ShoppingList { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -49,6 +48,7 @@ namespace PatikaFinalProject.DataAccess
 
         [ForeignKey("ShoppingList")]
         public int ShoppingListID { get; set; }
+        //[ForeignKey("ShoppingListID")]
         public ShoppingList ShoppingList { get; set; }
 
         public string Name { get; set; }

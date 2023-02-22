@@ -62,7 +62,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse<List<ShoppingListDTO>>> GetAll()
         {
-            List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Include(co => co.ProductList).ToListAsync();
+            List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
 
             List<ShoppingListDTO> data = mapper.Map<List<ShoppingListDTO>>(shoppingList);
             return new Response<List<ShoppingListDTO>>(ResponseType.Success, data);
