@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlTypes;
 
 namespace PatikaFinalProject.DataAccess
@@ -7,32 +8,37 @@ namespace PatikaFinalProject.DataAccess
     {
         public int ID { get; set; }
 
-        public int CategoryID { get; set; }
-        [ForeignKey("CategoryID")]
-        public Category Category { get; set; }
+        
+        public Category? Category { get; set; }
 
-        public ICollection<Product> ProductList { get; set; }
+        //[ForeignKey("ShoppingListID")]
+        public ICollection<Product>? ProductList { get; set; }
 
         public bool isBought { get; set; }
-        public DateOnly CreationDate { get; set; }
-        public DateOnly CompletedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime CompletedDate { get; set; }
     }
     public class ShoppingListCreateDTO
     {
         public int CategoryID { get; set; }
         public bool isBought { get; set; }
-        public DateOnly CreationDate { get; set; }
-        public DateOnly CompletedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime CompletedDate { get; set; }
     }
 
     public class CategoryDTO
     {
         public int ID { get; set; }
+
+        [ForeignKey("ShoppingList")]
+        public int ShoppingListID { get; set; }
+        public ShoppingList ShoppingList { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
     public class CategoryCreateDTO
     {
+        public int ShoppingListID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
@@ -41,8 +47,8 @@ namespace PatikaFinalProject.DataAccess
     {
         public int ID { get; set; }
 
+        [ForeignKey("ShoppingList")]
         public int ShoppingListID { get; set; }
-        [ForeignKey("ShoppingListID")]
         public ShoppingList ShoppingList { get; set; }
 
         public string Name { get; set; }

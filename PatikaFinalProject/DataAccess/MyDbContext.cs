@@ -9,8 +9,8 @@ namespace PatikaFinalProject.DataAccess
 
         }
 
-        public DbSet<ShoppingList> MovieType { get; set; }
-        public DbSet<Category> Customer { get; set; }
-        public DbSet<Product> Movie { get; set; }
+        public DbSet<ShoppingList> ShoppingList { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Product> Product { get; set; }
     }
 }

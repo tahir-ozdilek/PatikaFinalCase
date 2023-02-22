@@ -11,38 +11,38 @@ namespace PatikaFinalProject.Controllers
     [Route("[controller]")]
     public class MovieController : ControllerBase
     {
-        MovieService _MovieService;
+        ShoppingListService shoppingListService;
 
-        private readonly ILogger<MovieService> _logger;
+        private readonly ILogger<ShoppingListService> logger;
 
-        public MovieController(ILogger<MovieService> logger, MovieService service)
+        public MovieController(ILogger<ShoppingListService> logger, ShoppingListService service)
         {
-            _MovieService = service;
-            _logger = logger;
+            shoppingListService = service;
+            this.logger = logger;
         }
 
         [HttpPost(Name = "AddMovie")]
-        public async Task<IResponse<MovieCreateDTO>> AddMovie(MovieCreateDTO newMovie)
+        public async Task<IResponse<ShoppingListCreateDTO>> AddMovie(ShoppingListCreateDTO newShoppingList)
         {
-            return await _MovieService.Create(newMovie);
+            return await shoppingListService.Create(newShoppingList);
         }
         
         [HttpDelete(Name = "DeleteMovie")]
         public async Task<IResponse> DeleteMovie(int id)
         {
-            return await _MovieService.Remove(id);
+            return await shoppingListService.Remove(id);
         }
 
         [HttpPut(Name = "UpdateMovie")]
-        public async Task<IResponse<MovieDTO>> UpdateMovie(MovieDTO newMovie)
+        public async Task<IResponse<ShoppingListDTO>> UpdateMovie(ShoppingListDTO newMovie)
         {
-            return await _MovieService.Update(newMovie);
+            return await shoppingListService.Update(newMovie);
         }
 
         [HttpGet("GetAllMovies")]
         public async Task<IResponse> GetMovies( )
         {
-            return await _MovieService.GetAll();
+            return await shoppingListService.GetAll();
         }
     }
 }

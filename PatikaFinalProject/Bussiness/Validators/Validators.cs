@@ -8,9 +8,8 @@ namespace PatikaFinalProject.Services.Validators
         public ShoppingListDTOValidator()
         {
             RuleFor(x => x.ID).NotEmpty();
-            RuleFor(x => x.CategoryID).NotEmpty();
-            RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
-            RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
+            //RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateTime.Now);
+            //RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateTime.Now);
         }
     }
     public class ShoppingListCreateDTOValidator : AbstractValidator<ShoppingListCreateDTO>
@@ -18,8 +17,8 @@ namespace PatikaFinalProject.Services.Validators
         public ShoppingListCreateDTOValidator()
         {
             RuleFor(x => x.CategoryID).NotEmpty();
-            RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
-            RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
+           // RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateTime.Now);
+            //RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateTime.Now);
         }
     }
 

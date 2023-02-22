@@ -14,7 +14,7 @@ namespace xUnitTests
 {
     public class MovieTests : TestsBase
     {
-        private MovieService movieService;
+        private ShoppingListService movieService;
 
         public MovieTests()
         {
