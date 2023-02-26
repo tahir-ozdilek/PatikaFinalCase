@@ -45,7 +45,7 @@ namespace PatikaFinalProject.Controllers
             return await shoppingListService.GetSingle(id);
         }
 
-        [HttpGet("GeAlltShoppingLists")]
+        [HttpGet("GetAllShoppingLists")]
         public async Task<IResponse> GetAllShoppingLists( )
         {
             return await shoppingListService.GetAll();

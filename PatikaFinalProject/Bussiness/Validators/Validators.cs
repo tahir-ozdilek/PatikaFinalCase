@@ -16,7 +16,6 @@ namespace PatikaFinalProject.Services.Validators
     {
         public ShoppingListCreateDTOValidator()
         {
-            RuleFor(x => x.CategoryID).NotEmpty();
            // RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateTime.Now);
             //RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateTime.Now);
         }
@@ -59,7 +58,7 @@ namespace PatikaFinalProject.Services.Validators
     {
         public ProductCreateDTOValidator()
         {
-            RuleFor(x => x.ShoppingListID).NotEmpty();
+           // RuleFor(x => x.ShoppingListID).NotEmpty();
             RuleFor(x => x.Name).Length(0, 20);
             RuleFor(x => x.Unit).Length(0, 20);
             RuleFor(x => x.Amount).InclusiveBetween(Int32.MinValue, Int32.MaxValue);

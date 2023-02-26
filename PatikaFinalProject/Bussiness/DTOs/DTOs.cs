@@ -15,7 +15,8 @@ namespace PatikaFinalProject.DataAccess
     }
     public class ShoppingListCreateDTO
     {
-        public int CategoryID { get; set; }
+        public CategoryCreateDTO? Category { get; set; }
+        public List<ProductCreateDTO>? ProductList { get; set; } 
         public bool isBought { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime CompletedDate { get; set; }
@@ -30,7 +31,6 @@ namespace PatikaFinalProject.DataAccess
     }
     public class CategoryCreateDTO
     {
-        public int ShoppingListID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
@@ -45,7 +45,6 @@ namespace PatikaFinalProject.DataAccess
     }
     public class ProductCreateDTO
     {
-        public int ShoppingListID { get; set; }
         public string Name { get; set; }
         public string Unit { get; set; }
         public int Amount { get; set; }

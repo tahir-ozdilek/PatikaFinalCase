@@ -86,10 +86,17 @@ namespace PatikaFinalProject.Bussiness.Services
             var result = DTOValidator.Validate(dto);
             if (result.IsValid)
             {
-                var updatedEntity = await dbContext.Set<ShoppingList>().FindAsync(dto.ID);
+                //TODO add transaction
+                var updatedEntity = await dbContext.Set<ShoppingList>().Include(x => x.Category).Include(x => x.ProductList).SingleOrDefaultAsync(c=> c.ID ==dto.ID);
                 if (updatedEntity != null)
                 {
                     dbContext.Set<ShoppingList>().Entry(updatedEntity).CurrentValues.SetValues(mapper.Map<ShoppingList>(dto));
+                    dbContext.Set<Category>().Entry(updatedEntity.Category).CurrentValues.SetValues(mapper.Map<Category>(dto.Category));
+                    for(int i = 0; i< dto.ProductList.Count; i++)
+                    {
+                        dbContext.Set<Product>().Entry(dbContext.Set<Product>().SingleOrDefault(x=> x.ID == dto.ProductList[i].ID)).CurrentValues.SetValues(mapper.Map<Product>(dto.ProductList[i]));
+                    }
+                    
                     await dbContext.SaveChangesAsync();
                     return new Response<ShoppingListDTO>(ResponseType.Success, dto);
                 }

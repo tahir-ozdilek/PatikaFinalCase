@@ -8,7 +8,7 @@ namespace PatikaFinalProject.DataAccess
     {
         public int ID { get; set; }
         public virtual Category? Category { get; set; }
-        public virtual ICollection<Product>? ProductList { get; set; }
+        public virtual List<Product>? ProductList { get; set; }
         
         public bool isBought { get; set; }
         public DateTime CreationDate { get; set; }
