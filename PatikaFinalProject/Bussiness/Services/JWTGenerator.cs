@@ -22,7 +22,7 @@ namespace PatikaFinalProject.Bussiness.Services
             this.loginRequestValidation = loginRequestValidation;
         }
 
-        public bool ValidateCredentials(LoginRequestModel userModel)
+        public IResponse<LoginResponseModel> ValidateCredentials(LoginRequestModel userModel)
         {
             byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
 
@@ -30,7 +30,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
             if (user == null)
             {
-                return false;
+                return new Response<LoginResponseModel>(;
             }
             return true;
         }
@@ -53,14 +53,13 @@ namespace PatikaFinalProject.Bussiness.Services
             return response;
         }
 
-        public LoginResponseModel GenerateToken(LoginRequestModel userModel)
-        {
+        public LoginResponseModel GenerateToken(LoginResponseModel userModel)
+        { 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
 
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
-            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, "Member"), 
-                                                     new Claim(ClaimTypes.Role, "Admin") };
+            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
     
             JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(100), signingCredentials: credentials);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
@@ -76,13 +75,15 @@ namespace PatikaFinalProject.Bussiness.Services
 
     public class LoginResponseModel
     {
-        public LoginResponseModel(string token, LoginRequestModel userModel)
+        public LoginResponseModel(string token, LoginResponseModel userModel)
         {
             Token = token;
             UserName = userModel.UserName;
+            UserType = userModel.UserType;
         }
         public string UserName { get; set; }
         public string Token { get; set; }
+        public string UserType { get; set; } // Member, Admin
     }
 
     public class RegistrationRequestModel
