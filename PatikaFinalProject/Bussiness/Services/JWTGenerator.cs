@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,22 +24,40 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public bool ValidateCredentials(LoginRequestModel userModel)
         {
-            // TODO connect to DB to valite username and pass
-            // In a real project user log in mechanism would be an indivual module:
-            // Hashing and salting pass, using authorization/role pattern etc..
+            byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
+
+            User? user = dbContext.User.SingleOrDefault(x => x.UserName == userModel.UserName && x.HashedPass == hashedPass);
+
+            if (user == null)
+            {
+                return false;
+            }
             return true;
         }
 
-        public async Task<IResponse<>> Register(LoginRequestModel userModel)
+        public async Task<RegistrationResponseModel> Register(RegistrationRequestModel userModel)
         {
-            dbContext
+            RegistrationResponseModel response = new RegistrationResponseModel();
+            User? user = dbContext.User.SingleOrDefault(x => x.UserName == userModel.UserName);
+            if(user == null)
+            {
+                byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
+                
+                dbContext.User.Add(new User(userModel.UserName, hashedPass, userModel.UserType));
+                response.Message = "Successfully registered.";
+            }
+            else
+            {
+                response.Message = "Username already exist.";
+            }
+            return response;
         }
 
         public LoginResponseModel GenerateToken(LoginRequestModel userModel)
         {
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
 
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, "Member"), 
                                                      new Claim(ClaimTypes.Role, "Admin") };
@@ -54,6 +73,7 @@ namespace PatikaFinalProject.Bussiness.Services
         public string UserName { get; set; }
         public string Password { get; set; }
     }
+
     public class LoginResponseModel
     {
         public LoginResponseModel(string token, LoginRequestModel userModel)
@@ -64,4 +84,17 @@ namespace PatikaFinalProject.Bussiness.Services
         public string UserName { get; set; }
         public string Token { get; set; }
     }
+
+    public class RegistrationRequestModel
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string UserType { get; set; } // Member, Admin
+    }
+
+    public class RegistrationResponseModel
+    {
+        public string Message { get; set; }
+    }
+
 }

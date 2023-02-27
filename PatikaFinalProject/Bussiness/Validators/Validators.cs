@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using PatikaFinalProject.Bussiness.Services;
 using PatikaFinalProject.DataAccess;
 
 namespace PatikaFinalProject.Services.Validators
@@ -62,6 +63,22 @@ namespace PatikaFinalProject.Services.Validators
             RuleFor(x => x.Name).Length(0, 20);
             RuleFor(x => x.Unit).Length(0, 20);
             RuleFor(x => x.Amount).InclusiveBetween(Int32.MinValue, Int32.MaxValue);
+        }
+    }
+
+    public class LoginRequestModelValidator : AbstractValidator<LoginRequestModel>
+    {
+        public LoginRequestModelValidator()
+        {
+
+        }
+    }
+
+    public class RegistrationModelValidator : AbstractValidator<RegistrationRequestModel>
+    {
+        public RegistrationModelValidator()
+        {
+
         }
     }
 }

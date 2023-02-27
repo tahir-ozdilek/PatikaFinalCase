@@ -23,13 +23,13 @@ namespace PatikaFinalCase.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IResponse<LoginResponseModel>> Register(LoginRequestModel loginModel)
+        public async Task<RegistrationResponseModel> Register(RegistrationRequestModel loginModel)
         {
             return await loginService.Register(loginModel);
         }
 
         [HttpPost("LogIn")]
-        public IActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
+        public ActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
         {
             bool isUser = loginService.ValidateCredentials(loginModel);
             if(!isUser) 
