@@ -6,6 +6,7 @@ using PatikaFinalProject.Common;
 using System.Text;
 using System.Text.Json.Serialization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -41,6 +42,7 @@ builder.Services.AddSwaggerGen(c => {
         }
     });
 });
+builder.Services.AddOutputCache();
 
 builder.Services.AddDependencies();
 builder.Services.AddCors(options =>
@@ -63,7 +65,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ClockSkew = TimeSpan.Zero,
     };
 });
+builder.Services.AddOutputCache(options =>
+{
+    options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(10);
+});
 var app = builder.Build();
+
+app.UseOutputCache();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -72,7 +80,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication();
+app.UseAuthentication();    
 app.UseAuthorization();
 
 app.UseMiddleware<ExceptionLoggerMiddleware>();

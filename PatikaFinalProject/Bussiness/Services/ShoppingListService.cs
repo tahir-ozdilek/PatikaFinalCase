@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
 using System.ComponentModel.Design;

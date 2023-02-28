@@ -27,7 +27,7 @@ namespace PatikaFinalCase.Controllers
         [HttpPost("Register")]
         public async Task<IResponse> Register(RegistrationRequestModel loginModel)
         {
-            return await loginService.Register(loginModel);
+            return await loginService.Register(loginModel); 
         }
 
         [AllowAnonymous]

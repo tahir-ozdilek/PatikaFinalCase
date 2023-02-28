@@ -16,11 +16,12 @@ namespace PatikaFinalProject.Common
     {
         public static void AddDependencies(this IServiceCollection services)
         {
-            MapperConfiguration configuration = new MapperConfiguration(opt => {
-                                                                                    opt.AddProfile(new ShoppingListProfile());
-                                                                                    opt.AddProfile(new CategoryProfile());
-                                                                                    opt.AddProfile(new ProductProfile());
-                                                                                });
+            MapperConfiguration configuration = new MapperConfiguration(opt =>
+            {
+                opt.AddProfile(new ShoppingListProfile());
+                opt.AddProfile(new CategoryProfile());
+                opt.AddProfile(new ProductProfile());
+            });
 
             IMapper mapper = configuration.CreateMapper();
 
@@ -28,11 +29,11 @@ namespace PatikaFinalProject.Common
             services.AddDbContext<MyDbContext>(opt =>
             {
                 //opt.UseSqlServer("Data Source=TR33NBK161\\MSSQLSERVER01; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;"); 
-                opt.UseSqlServer("Data Source=Dell; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;"); 
+                opt.UseSqlServer("Data Source=Dell; Initial Catalog=finalCase; Integrated Security=true; TrustServerCertificate=True;");
                 opt.LogTo(Console.WriteLine, LogLevel.Information);
             });
             services.AddSingleton(mapper);
-           
+
             services.AddTransient<IValidator<ShoppingListCreateDTO>, ShoppingListCreateDTOValidator>();
             services.AddTransient<IValidator<ShoppingListDTO>, ShoppingListDTOValidator>();
             services.AddTransient<IValidator<CategoryCreateDTO>, CategoryCreateDTOValidator>();
@@ -44,7 +45,6 @@ namespace PatikaFinalProject.Common
             services.AddTransient<JWTGenerator, JWTGenerator>();
 
             services.AddScoped<ShoppingListService, ShoppingListService>();
-         
         }
     }
 }
