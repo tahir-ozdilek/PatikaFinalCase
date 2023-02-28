@@ -49,20 +49,20 @@ namespace PatikaFinalProject.Bussiness.Services
             return new LoginResponseModel(handler.WriteToken(token), userModel.UserName);
         }
 
-        public async Task<RegistrationResponseModel> Register(RegistrationRequestModel userModel)
+        public async Task<IResponse> Register(RegistrationRequestModel userModel)
         {
-            RegistrationResponseModel response = new RegistrationResponseModel();
+            IResponse response;
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
             if(user == null)
             {
                 byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
                 
                 await dbContext.Set<User>().AddAsync(new User(userModel.UserName, hashedPass, userModel.UserType));
-                response.Message = "Successfully registered.";
+                response = new Response(ResponseType.Success, "Successfully registered.");
             }
             else
             {
-                response.Message = "Username already exist.";
+                response = new Response(ResponseType.ValidationError, "Username already exist.");
             }
             return response;
         }
@@ -96,10 +96,4 @@ namespace PatikaFinalProject.Bussiness.Services
             UserType = userType;
         }
     }
-
-    public class RegistrationResponseModel
-    {
-        public string Message { get; set; }
-    }
-
 }

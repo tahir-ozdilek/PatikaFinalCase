@@ -23,7 +23,7 @@ namespace PatikaFinalCase.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<RegistrationResponseModel> Register(RegistrationRequestModel loginModel)
+        public async Task<IResponse> Register(RegistrationRequestModel loginModel)
         {
             return await loginService.Register(loginModel);
         }
