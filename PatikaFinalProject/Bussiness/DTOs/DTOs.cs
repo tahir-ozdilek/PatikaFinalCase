@@ -7,6 +7,7 @@ namespace PatikaFinalProject.DataAccess
     public class ShoppingListDTO
     {
         public int ID { get; set; }
+        public string Name { get; set; }
         public Category? Category { get; set; }
         public List<Product>? ProductList { get; set; }
         public bool isBought { get; set; }
@@ -15,6 +16,7 @@ namespace PatikaFinalProject.DataAccess
     }
     public class ShoppingListCreateDTO
     {
+        public string Name { get; set; }
         public CategoryCreateDTO? Category { get; set; }
         public List<ProductCreateDTO>? ProductList { get; set; } 
         public bool isBought { get; set; }

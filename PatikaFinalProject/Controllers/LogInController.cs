@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatikaFinalProject.Bussiness.Services;
@@ -22,12 +23,14 @@ namespace PatikaFinalCase.Controllers
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<IResponse> Register(RegistrationRequestModel loginModel)
         {
             return await loginService.Register(loginModel);
         }
 
+        [AllowAnonymous]
         [HttpPost("LogIn")]
         public ActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
         {
@@ -36,7 +39,7 @@ namespace PatikaFinalCase.Controllers
             { 
                 return Unauthorized();
             }
-             return Ok(loginService.GenerateToken(userModel.Data));
+            return Ok(loginService.GenerateToken(userModel.Data));
         }
     }
 }

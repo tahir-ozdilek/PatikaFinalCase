@@ -33,7 +33,6 @@ namespace PatikaFinalProject.Common
             });
             services.AddSingleton(mapper);
            
-
             services.AddTransient<IValidator<ShoppingListCreateDTO>, ShoppingListCreateDTOValidator>();
             services.AddTransient<IValidator<ShoppingListDTO>, ShoppingListDTOValidator>();
             services.AddTransient<IValidator<CategoryCreateDTO>, CategoryCreateDTOValidator>();
