@@ -30,9 +30,9 @@ namespace PatikaFinalProject.Bussiness.Services
 
             if (user == null)
             {
-                return new Response<LoginResponseModel>(;
+                return new Response<LoginResponseModel>(ResponseType.NotFound, "Not Found");
             }
-            return true;
+            return new Response<LoginResponseModel>(ResponseType.NotFound, "Not Found");
         }
 
         public async Task<RegistrationResponseModel> Register(RegistrationRequestModel userModel)
@@ -75,7 +75,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
     public class LoginResponseModel
     {
-        public LoginResponseModel(string token, LoginResponseModel userModel)
+        public LoginResponseModel(string token, LoginRequestModel userModel)
         {
             Token = token;
             UserName = userModel.UserName;
