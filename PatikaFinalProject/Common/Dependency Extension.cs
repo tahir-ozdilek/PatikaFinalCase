@@ -42,7 +42,7 @@ namespace PatikaFinalProject.Common
             services.AddTransient<IValidator<ProductDTO>, ProductDTOValidator>();
             services.AddTransient<IValidator<LoginRequestModel>, LoginRequestModelValidator>();
             services.AddTransient<IValidator<RegistrationRequestModel>, RegistrationModelValidator>();
-            services.AddTransient<JWTGenerator, JWTGenerator>();
+            services.AddTransient<RegisterLogin, RegisterLogin>();
 
             services.AddScoped<ShoppingListService, ShoppingListService>();
         }

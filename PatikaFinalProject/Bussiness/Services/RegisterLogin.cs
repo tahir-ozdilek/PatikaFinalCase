@@ -11,12 +11,12 @@ using System.Text;
 
 namespace PatikaFinalProject.Bussiness.Services
 {
-    public class JWTGenerator
+    public class RegisterLogin
     {
         private readonly MyDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IValidator<LoginRequestModel> loginRequestValidation;
-        public JWTGenerator(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidation)
+        public RegisterLogin(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidation)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
@@ -33,8 +33,9 @@ namespace PatikaFinalProject.Bussiness.Services
             {
                 return new Response<RegistrationRequestModel>(ResponseType.NotFound, "Not Found");
             }
-            return new Response<RegistrationRequestModel>(ResponseType.Success, new RegistrationRequestModel(user.UserName,user.UserType));
+            return new Response<RegistrationRequestModel>(ResponseType.Success, new RegistrationRequestModel(user.UserName, userModel.Password, user.UserType));
         }
+
         public LoginResponseModel GenerateToken(RegistrationRequestModel userModel)
         {
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
@@ -56,8 +57,10 @@ namespace PatikaFinalProject.Bussiness.Services
             if(user == null)
             {
                 byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
-                
+
                 await dbContext.Set<User>().AddAsync(new User(userModel.UserName, hashedPass, userModel.UserType));
+                await dbContext.SaveChangesAsync();
+
                 response = new Response(ResponseType.Success, "Successfully registered.");
             }
             else
@@ -76,13 +79,14 @@ namespace PatikaFinalProject.Bussiness.Services
 
     public class LoginResponseModel
     {
+        public string UserName { get; set; }
+        public string Token { get; set; }
+
         public LoginResponseModel(string token, string userName)
         {
             Token = token;
             UserName = userName;
         }
-        public string UserName { get; set; }
-        public string Token { get; set; }
     }
 
     public class RegistrationRequestModel
@@ -90,10 +94,13 @@ namespace PatikaFinalProject.Bussiness.Services
         public string UserName { get; set; }
         public string Password { get; set; }
         public string UserType { get; set; } // Member, Admin
-        public RegistrationRequestModel(string userName, string userType)
+
+        public RegistrationRequestModel() { }
+        public RegistrationRequestModel(string userName, string userPassword, string userType)
         {
             UserName = userName;
             UserType = userType;
+            Password = userPassword;
         }
     }
 }

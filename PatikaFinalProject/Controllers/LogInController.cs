@@ -13,9 +13,9 @@ namespace PatikaFinalCase.Controllers
     [ApiController]
     public class LogInController : ControllerBase
     {
-        JWTGenerator loginService;
+        RegisterLogin loginService;
 
-        public LogInController(JWTGenerator service)
+        public LogInController(RegisterLogin service)
         {
             loginService = service;
         }

@@ -41,7 +41,12 @@ namespace PatikaFinalProject.DataAccess
             HashedPass = hashedPass;
             UserType = userType;
         }
-
+        public User(string userName, string userType)
+        {
+            UserName = userName;
+ 
+            UserType = userType;
+        }
         public int ID { get; set; }
         public string UserName { get; set; }
         public byte[] HashedPass { get; set; }
