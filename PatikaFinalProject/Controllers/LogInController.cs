@@ -15,12 +15,9 @@ namespace PatikaFinalCase.Controllers
     {
         JWTGenerator loginService;
 
-        private readonly ILogger<JWTGenerator> logger;
-
-        public LogInController(ILogger<JWTGenerator> logger, JWTGenerator service)
+        public LogInController(JWTGenerator service)
         {
             loginService = service;
-            this.logger = logger;
         }
 
         [AllowAnonymous]

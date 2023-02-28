@@ -16,12 +16,9 @@ namespace PatikaFinalProject.Controllers
     {
         ShoppingListService shoppingListService;
 
-        private readonly ILogger<ShoppingListService> logger;
-
-        public ShoppingListController(ILogger<ShoppingListService> logger, ShoppingListService service)
+        public ShoppingListController(ShoppingListService service)
         {
             shoppingListService = service;
-            this.logger = logger;
         }
 
         [HttpPost(Name = "AddShoppingList")]
