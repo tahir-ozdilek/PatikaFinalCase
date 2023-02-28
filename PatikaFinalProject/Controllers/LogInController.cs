@@ -31,12 +31,12 @@ namespace PatikaFinalCase.Controllers
         [HttpPost("LogIn")]
         public ActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
         {
-            bool isUser = loginService.ValidateCredentials(loginModel);
-            if(!isUser) 
+            IResponse<RegistrationRequestModel> userModel = loginService.ValidateCredentials(loginModel);
+            if(userModel.ResponseType == ResponseType.NotFound) 
             { 
                 return Unauthorized();
             }
-             return Ok(loginService.GenerateToken(loginModel));
+             return Ok(loginService.GenerateToken(userModel.Data));
         }
     }
 }

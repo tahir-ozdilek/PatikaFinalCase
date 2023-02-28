@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
@@ -22,28 +23,41 @@ namespace PatikaFinalProject.Bussiness.Services
             this.loginRequestValidation = loginRequestValidation;
         }
 
-        public IResponse<LoginResponseModel> ValidateCredentials(LoginRequestModel userModel)
+        public IResponse<RegistrationRequestModel> ValidateCredentials(LoginRequestModel userModel)
         {
             byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
 
-            User? user = dbContext.User.SingleOrDefault(x => x.UserName == userModel.UserName && x.HashedPass == hashedPass);
+            User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName && x.HashedPass == hashedPass);
 
             if (user == null)
             {
-                return new Response<LoginResponseModel>(ResponseType.NotFound, "Not Found");
+                return new Response<RegistrationRequestModel>(ResponseType.NotFound, "Not Found");
             }
-            return new Response<LoginResponseModel>(ResponseType.NotFound, "Not Found");
+            return new Response<RegistrationRequestModel>(ResponseType.Success, new RegistrationRequestModel(user.UserName,user.UserType));
+        }
+        public LoginResponseModel GenerateToken(RegistrationRequestModel userModel)
+        {
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
+
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
+
+            JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(100), signingCredentials: credentials);
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+
+            return new LoginResponseModel(handler.WriteToken(token), userModel.UserName);
         }
 
         public async Task<RegistrationResponseModel> Register(RegistrationRequestModel userModel)
         {
             RegistrationResponseModel response = new RegistrationResponseModel();
-            User? user = dbContext.User.SingleOrDefault(x => x.UserName == userModel.UserName);
+            User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
             if(user == null)
             {
                 byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
                 
-                dbContext.User.Add(new User(userModel.UserName, hashedPass, userModel.UserType));
+                await dbContext.Set<User>().AddAsync(new User(userModel.UserName, hashedPass, userModel.UserType));
                 response.Message = "Successfully registered.";
             }
             else
@@ -51,19 +65,6 @@ namespace PatikaFinalProject.Bussiness.Services
                 response.Message = "Username already exist.";
             }
             return response;
-        }
-
-        public LoginResponseModel GenerateToken(LoginResponseModel userModel)
-        { 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
-
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
-            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
-    
-            JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(100), signingCredentials: credentials);
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return new LoginResponseModel(handler.WriteToken(token), userModel);
         }
     }
 
@@ -75,15 +76,13 @@ namespace PatikaFinalProject.Bussiness.Services
 
     public class LoginResponseModel
     {
-        public LoginResponseModel(string token, LoginRequestModel userModel)
+        public LoginResponseModel(string token, string userName)
         {
             Token = token;
-            UserName = userModel.UserName;
-            UserType = userModel.UserType;
+            UserName = userName;
         }
         public string UserName { get; set; }
         public string Token { get; set; }
-        public string UserType { get; set; } // Member, Admin
     }
 
     public class RegistrationRequestModel
@@ -91,6 +90,11 @@ namespace PatikaFinalProject.Bussiness.Services
         public string UserName { get; set; }
         public string Password { get; set; }
         public string UserType { get; set; } // Member, Admin
+        public RegistrationRequestModel(string userName, string userType)
+        {
+            UserName = userName;
+            UserType = userType;
+        }
     }
 
     public class RegistrationResponseModel
