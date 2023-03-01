@@ -35,11 +35,18 @@ namespace PatikaFinalProject.Controllers
             return await shoppingListService.CreateCategory(newCategory);
         }
 
-        [HttpDelete(Name = "DeleteShoppingList-{id}")]
+        [HttpDelete("DeleteShoppingList-{id}")]
         //[Authorize(Roles = "Member, Admin")]
         public async Task<IResponse> DeleteShoppingList(int id)
         {
-            return await shoppingListService.Remove(id);
+            return await shoppingListService.RemoveShoppingList(id);
+        }
+
+        [HttpDelete("DeleteCategory-{id}")]
+        //[Authorize(Roles = "Member, Admin")]
+        public async Task<IResponse> DeleteCategory(int id)
+        {
+            return await shoppingListService.RemoveCategory(id);
         }
 
         [HttpPut("UpdateAllInOne-{id}")]

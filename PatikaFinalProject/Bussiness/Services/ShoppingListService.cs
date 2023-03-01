@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Caching.Memory;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
@@ -58,9 +59,9 @@ namespace PatikaFinalProject.Bussiness.Services
             }
         }
 
-        public async Task<IResponse> Remove(int id)
+        public async Task<IResponse> RemoveShoppingList(int id)
         {
-            var entityToRemove = dbContext.ShoppingList.Include(x=> x.ProductList).Include(x => x.Category).SingleOrDefault(x => x.ID == id);
+            ShoppingList? entityToRemove = dbContext.ShoppingList.Include(x=> x.ProductList).SingleOrDefault(x => x.ID == id);
             if (entityToRemove != null)
             {
                 dbContext.RemoveRange(entityToRemove.ProductList);
@@ -70,7 +71,29 @@ namespace PatikaFinalProject.Bussiness.Services
             }
             return new Response(ResponseType.NotFound, "Not Found");
         }
-        
+
+        public async Task<IResponse<List<ShoppingList>>> RemoveCategory(int id)
+        {
+            List<ShoppingList>? listsContainsReletedCategory = await dbContext.ShoppingList.Include(x=> x.Category).Include(x=>x.ProductList).Where(x => x.CategoryID == id).ToListAsync();
+            if(listsContainsReletedCategory.Count == 0) 
+            { 
+                Category? entityToRemove = dbContext.Category.SingleOrDefault(x => x.ID == id);
+                if (entityToRemove != null)
+                {
+                    EntityEntry<Category> a = dbContext.Remove(entityToRemove);
+                
+                    await dbContext.SaveChangesAsync();
+                    return new Response<List<ShoppingList>>(ResponseType.Success, "Successfully removed.");
+                }
+                return new Response<List<ShoppingList>>(ResponseType.NotFound, "Not Found");
+            }
+            else
+            {
+                string Message = "First, you have to delete these related shopping lists to be able to remove this category";
+                return new Response<List<ShoppingList>>(ResponseType.ValidationError, listsContainsReletedCategory, Message);
+            }
+        }
+
         public async Task<IResponse<ShoppingListDTO>> GetSingle(int id)
         {
             ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id && z.isBought == false);

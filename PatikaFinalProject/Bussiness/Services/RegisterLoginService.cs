@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,12 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public IResponse<RegistrationRequestModel> ValidateCredentials(LoginRequestModel userModel)
         {
-            loginRequestValidator.Validate(userModel);
+            ValidationResult validationResult = loginRequestValidator.Validate(userModel);
+
+            if (!validationResult.IsValid)
+            {
+                return new Response<RegistrationRequestModel>(ResponseType.ValidationError, new RegistrationRequestModel(userModel.UserName, userModel.Password, null), createValidationResult(validationResult));
+            }
 
             byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
 
@@ -55,11 +61,11 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse> Register(RegistrationRequestModel userModel)
         {
-            registrationRequestValidator.Validate(userModel);
+            ValidationResult validationResult = registrationRequestValidator.Validate(userModel);
 
             IResponse response;
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
-            if(user == null)
+            if(user == null && validationResult.Errors.Count == 0)
             {
                 byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
 
@@ -68,11 +74,30 @@ namespace PatikaFinalProject.Bussiness.Services
 
                 response = new Response(ResponseType.Success, "Successfully registered.");
             }
-            else
+            else if(user != null)
             {
                 response = new Response(ResponseType.ValidationError, "Username already exist.");
             }
+            else
+            {
+                response = new Response<RegistrationRequestModel>(ResponseType.ValidationError, userModel, createValidationResult(validationResult));
+            }
             return response;
+        }
+
+        private List<CustomValidationError> createValidationResult(ValidationResult result)
+        {
+            List<CustomValidationError> errors = new();
+            foreach (var error in result.Errors)
+            {
+                errors.Add(new()
+                {
+                    ErrorMessage = error.ErrorMessage,
+                    PropertyName = error.PropertyName
+                });
+            }
+
+            return errors;
         }
     }
 

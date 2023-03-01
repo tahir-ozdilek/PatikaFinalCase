@@ -1,4 +1,6 @@
-﻿namespace PatikaFinalProject.Common
+﻿using FluentValidation.Results;
+
+namespace PatikaFinalProject.Common
 {
     public class CustomValidationError
     {
@@ -30,6 +32,7 @@
     public class Response<T> : Response, IResponse<T>
     {
         public T Data { get; set; }
+
         public Response(ResponseType responseType, T data) : base(responseType)
         {
             Data = data;
@@ -37,6 +40,12 @@
 
         public Response(ResponseType responseType, string message) : base(responseType, message)
         {
+        }
+
+        public Response(ResponseType responseType, T data, string message) : base(responseType)
+        {
+            Message = message;
+            Data = data;
         }
 
         public Response(ResponseType responseType, T data, List<CustomValidationError> errors) : base(responseType)
