@@ -55,8 +55,5 @@ namespace PatikaFinalProject.Controllers
         {
             return await shoppingListService.GetAll();
         }
-
-        
-
     }
 }

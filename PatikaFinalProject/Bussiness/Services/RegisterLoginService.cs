@@ -11,12 +11,12 @@ using System.Text;
 
 namespace PatikaFinalProject.Bussiness.Services
 {
-    public class RegisterLogin
+    public class RegisterLoginService
     {
         private readonly MyDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IValidator<LoginRequestModel> loginRequestValidation;
-        public RegisterLogin(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidation)
+        public RegisterLoginService(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidation)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;

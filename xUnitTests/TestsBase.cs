@@ -19,11 +19,7 @@ namespace xUnitTests
         {
             _dbContext = new MyDbContext(new DbContextOptionsBuilder<MyDbContext>().UseSqlServer("Data Source=Dell; Initial Catalog=patikaFinalProject; Integrated Security=true; TrustServerCertificate=True;").Options);
             MapperConfiguration configuration = new MapperConfiguration(opt => {
-                opt.AddProfile(new CustomerProfile());
-                opt.AddProfile(new ActorProfile());
-                opt.AddProfile(new DirectorProfile());
-                opt.AddProfile(new MovieProfile());
-                opt.AddProfile(new OrderMovieProfile());
+                opt.AddProfile(new ShoppingListProfile());
             });
             mapper = configuration.CreateMapper();
         }

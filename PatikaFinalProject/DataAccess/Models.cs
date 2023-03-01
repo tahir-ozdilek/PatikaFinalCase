@@ -35,6 +35,11 @@ namespace PatikaFinalProject.DataAccess
 
     public class User
     {
+        public int ID { get; set; }
+        public string UserName { get; set; }
+        public byte[] HashedPass { get; set; }
+        public string UserType { get; set; } // Member, Admin
+
         public User(string userName, byte[] hashedPass, string userType)
         {
             UserName = userName;
@@ -44,12 +49,8 @@ namespace PatikaFinalProject.DataAccess
         public User(string userName, string userType)
         {
             UserName = userName;
- 
             UserType = userType;
         }
-        public int ID { get; set; }
-        public string UserName { get; set; }
-        public byte[] HashedPass { get; set; }
-        public string UserType { get; set; } // Member, Admin
+
     }
 }

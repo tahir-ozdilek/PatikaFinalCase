@@ -13,9 +13,9 @@ using Xunit.Abstractions;
 namespace xUnitTests
 {
     //Director and Customer Tests will be pretty much similar too, I just skip them.
-    public class ActorTests : TestsBase
+    public class ShoppingListTests : TestsBase
     {
-        private ActorService movieService;
+       /* private ActorService movieService;
 
         public ActorTests()
         {
@@ -60,7 +60,7 @@ namespace xUnitTests
             ActorCreateDTOValidator mcv = new ActorCreateDTOValidator();
             ValidationResult valRes = mcv.Validate(dto);
             valRes.Errors.Count.Should().BeLessThanOrEqualTo(0);
-        }
+        }*/
 
 
     }

@@ -17,7 +17,7 @@ namespace PatikaFinalProject.Services.Validators
     {
         public ShoppingListCreateDTOValidator()
         {
-           // RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateTime.Now);
+            //RuleFor(x => x.CreationDate).LessThanOrEqualTo(DateTime.Now);
             //RuleFor(x => x.CompletedDate).GreaterThanOrEqualTo(DateTime.Now);
         }
     }
@@ -59,7 +59,7 @@ namespace PatikaFinalProject.Services.Validators
     {
         public ProductCreateDTOValidator()
         {
-           // RuleFor(x => x.ShoppingListID).NotEmpty();
+            // RuleFor(x => x.ShoppingListID).NotEmpty();
             RuleFor(x => x.Name).Length(0, 20);
             RuleFor(x => x.Unit).Length(0, 20);
             RuleFor(x => x.Amount).InclusiveBetween(Int32.MinValue, Int32.MaxValue);
@@ -78,7 +78,10 @@ namespace PatikaFinalProject.Services.Validators
     {
         public RegistrationModelValidator()
         {
-
+            RuleFor(x => x.UserName).Length(3, 30).WithMessage("Lenght of user name can be min 3 max 30 characters"); ;
+            RuleFor(x => x.UserType).Must(x => x.Equals("Member") || x.Equals("Admin")).WithMessage("User type can be only 'Member' or 'Admin'");
+            RuleFor(x => x.Password).Length(8,20).WithMessage("Lenght of password must be between 8 and 20 characters");
+            //additional conditions for password is a must
         }
     }
 }
