@@ -36,7 +36,7 @@ namespace PatikaFinalProject.Controllers
         }
 
         [HttpDelete(Name = "DeleteShoppingList-{id}")]
-        [Authorize(Roles = "Member, Admin")]
+        //[Authorize(Roles = "Member, Admin")]
         public async Task<IResponse> DeleteShoppingList(int id)
         {
             return await shoppingListService.Remove(id);

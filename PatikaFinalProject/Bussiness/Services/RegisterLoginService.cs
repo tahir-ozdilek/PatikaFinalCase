@@ -47,7 +47,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
             List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
 
-            JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(100), signingCredentials: credentials);
+            JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(1000), signingCredentials: credentials);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
             return new LoginResponseModel(handler.WriteToken(token), userModel.UserName);

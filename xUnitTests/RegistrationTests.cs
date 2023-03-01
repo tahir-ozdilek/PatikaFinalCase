@@ -18,7 +18,7 @@ namespace xUnitTests
 
         public LogInTests()
         {
-            movieService = new RegisterLoginService(_dbContext, mapper, new LoginRequestModelValidator());
+            movieService = new RegisterLoginService(_dbContext, mapper, new LoginRequestModelValidator(), new RegistrationModelValidator());
         }
         
         public static IEnumerable<object[]> InvalidInputList =>  new List<object[]>
@@ -34,7 +34,7 @@ namespace xUnitTests
         public void MovieInvalidInputTests(string userName, string password, string userType)
         {
             RegistrationRequestModel dto = new RegistrationRequestModel();
-
+            
             dto.UserName = userName;
             dto.Password = password;
             dto.UserType = userType;

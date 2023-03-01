@@ -8,6 +8,9 @@ namespace PatikaFinalProject.DataAccess
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        
+        public int CategoryID { get; set; }
+        [ForeignKey("CategoryID")]
         public virtual Category? Category { get; set; }
         public virtual List<Product>? ProductList { get; set; }
         
@@ -19,7 +22,6 @@ namespace PatikaFinalProject.DataAccess
     public class Category
     {
         public int ID { get; set; }
-        public int ShoppingListID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

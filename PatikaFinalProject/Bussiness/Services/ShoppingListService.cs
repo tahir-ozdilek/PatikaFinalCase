@@ -60,10 +60,11 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse> Remove(int id)
         {
-            var removedEntity = dbContext.ShoppingList.SingleOrDefault(x => x.ID == id);
-            if (removedEntity != null)
+            var entityToRemove = dbContext.ShoppingList.Include(x=> x.ProductList).Include(x => x.Category).SingleOrDefault(x => x.ID == id);
+            if (entityToRemove != null)
             {
-                dbContext.Remove(removedEntity);
+                dbContext.RemoveRange(entityToRemove.ProductList);
+                dbContext.Remove(entityToRemove);
                 await dbContext.SaveChangesAsync();
                 return new Response(ResponseType.Success);
             }
