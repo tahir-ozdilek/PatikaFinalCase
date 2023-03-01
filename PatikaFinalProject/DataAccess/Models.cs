@@ -51,6 +51,5 @@ namespace PatikaFinalProject.DataAccess
             UserName = userName;
             UserType = userType;
         }
-
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
+using PatikaFinalProject.Services.Validators;
 using System.ComponentModel.Design;
 using System.Linq;
 
@@ -14,19 +15,19 @@ namespace PatikaFinalProject.Bussiness.Services
     {
         private readonly MyDbContext dbContext;
         private readonly IMapper mapper;
-        private readonly IValidator<ShoppingListDTO> DTOValidator;
-        private readonly IValidator<ShoppingListCreateDTO> createDTOValidator;
+        private readonly IValidator<ShoppingListDTO> shopppingListDTOValidator;
+        private readonly IValidator<ShoppingListCreateDTO> shoppingListCreateDTOValidator;
         public ShoppingListService(MyDbContext dbContext, IMapper mapper, IValidator<ShoppingListCreateDTO> createDTOValidator, IValidator<ShoppingListDTO> DTOValidator)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            this.createDTOValidator = createDTOValidator;
-            this.DTOValidator = DTOValidator;
+            this.shoppingListCreateDTOValidator = createDTOValidator;
+            this.shopppingListDTOValidator = DTOValidator;
         }
 
-        public async Task<IResponse<ShoppingListCreateDTO>> Create(ShoppingListCreateDTO dto)
+        public async Task<IResponse<ShoppingListCreateDTO>> CreateShoppingList(ShoppingListCreateDTO dto)
         {
-            ValidationResult validationResult = createDTOValidator.Validate(dto);
+            ValidationResult validationResult = shoppingListCreateDTOValidator.Validate(dto);
 
             if (validationResult.IsValid)
             {
@@ -36,16 +37,24 @@ namespace PatikaFinalProject.Bussiness.Services
             }
             else
             {
-                List<CustomValidationError> errors = new();
-                foreach (ValidationFailure error in validationResult.Errors)
-                {
-                    errors.Add(new()
-                    {
-                        ErrorMessage = error.ErrorMessage,
-                        PropertyName = error.PropertyName
-                    });
-                }
-                return new Response<ShoppingListCreateDTO>(ResponseType.ValidationError, dto, errors);
+                return new Response<ShoppingListCreateDTO>(ResponseType.ValidationError, dto, createValidationResult(validationResult));
+            }
+        }
+
+        public async Task<IResponse<CategoryCreateDTO>> CreateCategory(CategoryCreateDTO dto)
+        {
+            CategoryCreateDTOValidator validator = new CategoryCreateDTOValidator();
+            ValidationResult validationResult = validator.Validate(dto);
+
+            if (validationResult.IsValid)
+            {
+                await dbContext.Set<Category>().AddAsync(mapper.Map<Category>(dto));
+                await dbContext.SaveChangesAsync();
+                return new Response<CategoryCreateDTO>(ResponseType.Success, dto);
+            }
+            else
+            {
+                return new Response<CategoryCreateDTO>(ResponseType.ValidationError, dto, createValidationResult(validationResult));
             }
         }
 
@@ -63,7 +72,7 @@ namespace PatikaFinalProject.Bussiness.Services
         
         public async Task<IResponse<ShoppingListDTO>> GetSingle(int id)
         {
-            ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id);
+            ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id && z.isBought == false);
 
             if(shoppingList == null)
             {
@@ -74,20 +83,27 @@ namespace PatikaFinalProject.Bussiness.Services
             return new Response<ShoppingListDTO>(ResponseType.Success, data);
         }
 
-        public async Task<IResponse<List<ShoppingListDTO>>> GetAll()
+        public async Task<IResponse<List<ShoppingListDTO>>> GetUncompletedAll()
         {
-            List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
+            List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Where(z => z.isBought == false).Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
 
             List<ShoppingListDTO> data = mapper.Map<List<ShoppingListDTO>>(shoppingList);
             return new Response<List<ShoppingListDTO>>(ResponseType.Success, data);
         }
 
-        public async Task<IResponse<ShoppingListDTO>> Update(ShoppingListDTO dto)
+        public async Task<IResponse<List<ShoppingListDTO>>> GetCompletedAll()
         {
-            var result = DTOValidator.Validate(dto);
+            List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Where(z => z.isBought == true).Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
+
+            List<ShoppingListDTO> data = mapper.Map<List<ShoppingListDTO>>(shoppingList);
+            return new Response<List<ShoppingListDTO>>(ResponseType.Success, data);
+        }
+
+        public async Task<IResponse<ShoppingListDTO>> UpdateAllInOne(ShoppingListDTO dto)
+        {
+            var result = shopppingListDTOValidator.Validate(dto);
             if (result.IsValid)
             {
-                //TODO add transaction
                 var updatedEntity = await dbContext.Set<ShoppingList>().Include(x => x.Category).Include(x => x.ProductList).SingleOrDefaultAsync(c=> c.ID ==dto.ID);
                 if (updatedEntity != null)
                 {
@@ -105,20 +121,44 @@ namespace PatikaFinalProject.Bussiness.Services
             }
             else
             {
-                List<CustomValidationError> errors = new();
-                foreach (var error in result.Errors)
-                {
-                    errors.Add(new()
-                    {
-                        ErrorMessage = error.ErrorMessage,
-                        PropertyName = error.PropertyName
-                    });
-                }
-
-                return new Response<ShoppingListDTO>(ResponseType.ValidationError, dto, errors);
+                return new Response<ShoppingListDTO>(ResponseType.ValidationError, dto, createValidationResult(result));
             }
         }
 
+        public async Task<IResponse<ShoppingListDTO>> UpdateOnlyShoppingList(ShoppingListDTO dto)
+        {
+            ValidationResult result = shopppingListDTOValidator.Validate(dto);
+            
+            if (result.IsValid)
+            {
+                var updatedEntity = await dbContext.Set<ShoppingList>().Include(x => x.Category).Include(x => x.ProductList).SingleOrDefaultAsync(c => c.ID == dto.ID);
+                if (updatedEntity != null)
+                {
+                    dbContext.Set<ShoppingList>().Entry(updatedEntity).CurrentValues.SetValues(mapper.Map<ShoppingList>(dto));
+                    await dbContext.SaveChangesAsync();
+                    return new Response<ShoppingListDTO>(ResponseType.Success, dto);
+                }
+                return new Response<ShoppingListDTO>(ResponseType.NotFound, "Not Found");
+            }
+            else
+            {
+                return new Response<ShoppingListDTO>(ResponseType.ValidationError, dto, createValidationResult(result));
+            }
+        }
 
+        private List<CustomValidationError> createValidationResult(ValidationResult result)
+        {
+            List<CustomValidationError> errors = new();
+            foreach (var error in result.Errors)
+            {
+                errors.Add(new()
+                {
+                    ErrorMessage = error.ErrorMessage,
+                    PropertyName = error.PropertyName
+                });
+            }
+
+            return errors;
+        }
     }
 }

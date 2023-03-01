@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PatikaFinalCase.Bussiness.Services;
 using PatikaFinalProject.Bussiness.Services;
 using PatikaFinalProject.Controllers;
 using PatikaFinalProject.DataAccess;
@@ -42,9 +43,10 @@ namespace PatikaFinalProject.Common
             services.AddTransient<IValidator<ProductDTO>, ProductDTOValidator>();
             services.AddTransient<IValidator<LoginRequestModel>, LoginRequestModelValidator>();
             services.AddTransient<IValidator<RegistrationRequestModel>, RegistrationModelValidator>();
-            services.AddTransient<RegisterLoginService, RegisterLoginService>();
-
+            
+            services.AddScoped<RegisterLoginService, RegisterLoginService>();
             services.AddScoped<ShoppingListService, ShoppingListService>();
+            services.AddScoped<ShoppingListSearchService, ShoppingListSearchService>();
         }
     }
 }

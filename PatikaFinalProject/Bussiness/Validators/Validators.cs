@@ -70,7 +70,8 @@ namespace PatikaFinalProject.Services.Validators
     {
         public LoginRequestModelValidator()
         {
-
+            // It may be wise idea to forbid some characters such as !,=,|,<,> for preventing injections.
+            RuleFor(x => x.UserName).Length(3, 30).WithMessage("Lenght of user name can be min 3 max 30 characters");
         }
     }
 
@@ -78,10 +79,14 @@ namespace PatikaFinalProject.Services.Validators
     {
         public RegistrationModelValidator()
         {
-            RuleFor(x => x.UserName).Length(3, 30).WithMessage("Lenght of user name can be min 3 max 30 characters"); ;
+            RuleFor(x => x.UserName).Length(3, 30).WithMessage("Lenght of user name can be min 3 max 30 characters");
             RuleFor(x => x.UserType).Must(x => x.Equals("Member") || x.Equals("Admin")).WithMessage("User type can be only 'Member' or 'Admin'");
-            RuleFor(x => x.Password).Length(8,20).WithMessage("Lenght of password must be between 8 and 20 characters");
-            //additional conditions for password is a must
+            RuleFor(x => x.Password).MinimumLength(8).WithMessage("Your password length must be at least 8.")
+                                    .MaximumLength(16).WithMessage("Your password length must not exceed 16.")
+                                    .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
+                                    .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
+                                    .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
+                                    .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
         }
     }
 }

@@ -21,39 +21,60 @@ namespace PatikaFinalProject.Controllers
             shoppingListService = service;
         }
 
-        [HttpPost(Name = "AddShoppingList")]
+        [HttpPost("AddShoppingList")]
         [Authorize(Roles = "Member, Admin")]
         public async Task<IResponse<ShoppingListCreateDTO>> AddShoppingList(ShoppingListCreateDTO newShoppingList)
         {
-            return await shoppingListService.Create(newShoppingList);
+            return await shoppingListService.CreateShoppingList(newShoppingList);
         }
-        
-        [HttpDelete(Name = "DeleteShoppingList")]
+
+        [HttpPost("CreateCategory")]
+        [Authorize(Roles = "Member, Admin")]
+        public async Task<IResponse<CategoryCreateDTO>> CreateCategory(CategoryCreateDTO newCategory)
+        {
+            return await shoppingListService.CreateCategory(newCategory);
+        }
+
+        [HttpDelete(Name = "DeleteShoppingList-{id}")]
         [Authorize(Roles = "Member, Admin")]
         public async Task<IResponse> DeleteShoppingList(int id)
         {
             return await shoppingListService.Remove(id);
         }
 
-        [HttpPut(Name = "UpdateShoppingList")]
+        [HttpPut("UpdateAllInOne-{id}")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse<ShoppingListDTO>> UpdateShoppingList(ShoppingListDTO newMovie)
+        public async Task<IResponse<ShoppingListDTO>> UpdateAllInOne(ShoppingListDTO newMovie)
         {
-            return await shoppingListService.Update(newMovie);
+            return await shoppingListService.UpdateAllInOne(newMovie);
         }
 
-        [HttpGet("GetSingleShoppingList")]
+        [HttpPut("UpdateOnlyShoppingList")]
+        [Authorize(Roles = "Member, Admin")]
+        public async Task<IResponse<ShoppingListDTO>> UpdateOnlyShoppingList(ShoppingListDTO newMovie)
+        {
+            return await shoppingListService.UpdateOnlyShoppingList(newMovie);
+        }
+
+        [HttpGet("GetSingleShoppingList-{id}")]
         [Authorize(Roles = "Member, Admin")]
         public async Task<IResponse> GetSingle(int id)
         {
             return await shoppingListService.GetSingle(id);
         }
 
-        [HttpGet("GetAllShoppingLists")]
+        [HttpGet("GetAllUncompletedShoppingLists")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> GetAllShoppingLists( )
+        public async Task<IResponse> GetAllUncompletedShoppingLists( )
         {
-            return await shoppingListService.GetAll();
+            return await shoppingListService.GetUncompletedAll();
+        }
+
+        [HttpGet("GetAllCompletedShoppingLists")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IResponse> GetAllCompletedShoppingLists()
+        {
+            return await shoppingListService.GetCompletedAll();
         }
     }
 }

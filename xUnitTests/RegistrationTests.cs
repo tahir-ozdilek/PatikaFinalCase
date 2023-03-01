@@ -42,13 +42,11 @@ namespace xUnitTests
             //Different approach attempts
             /*Func<Task> act = async () => await movieService.Create(dto);
             act.Should().ThrowAsync<InvalidOperationException>().WithMessage("'Price' must be greater than or equal to '0'.s");*/
-
             //FluentActions.Invoking(() => movieService.Create(dto)).Should().ThrowAsync<ArgumentNullException>().Result.And.Message;
 
             RegistrationModelValidator regVal = new RegistrationModelValidator();
             ValidationResult valRes = regVal.Validate(dto);
             valRes.Errors.Count.Should().BeGreaterThan(0);
-            //valRes.Errors.Should().Contain(new ValidationFailure("Price", "'Price' must be greater than or equal to '0'."));
         }
 
 

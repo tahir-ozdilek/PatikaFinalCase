@@ -14,17 +14,20 @@ namespace PatikaFinalProject.Bussiness.Services
     public class RegisterLoginService
     {
         private readonly MyDbContext dbContext;
-        private readonly IMapper mapper;
-        private readonly IValidator<LoginRequestModel> loginRequestValidation;
-        public RegisterLoginService(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidation)
+        private readonly IValidator<LoginRequestModel> loginRequestValidator;
+        private readonly IValidator<RegistrationRequestModel> registrationRequestValidator;
+        
+        public RegisterLoginService(MyDbContext dbContext, IMapper mapper, IValidator<LoginRequestModel> loginRequestValidator, IValidator<RegistrationRequestModel> registrationRequestValidator)
         {
             this.dbContext = dbContext;
-            this.mapper = mapper;
-            this.loginRequestValidation = loginRequestValidation;
+            this.loginRequestValidator = loginRequestValidator;
+            this.registrationRequestValidator = registrationRequestValidator;
         }
 
         public IResponse<RegistrationRequestModel> ValidateCredentials(LoginRequestModel userModel)
         {
+            loginRequestValidator.Validate(userModel);
+
             byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
 
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName && x.HashedPass == hashedPass);
@@ -52,6 +55,8 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse> Register(RegistrationRequestModel userModel)
         {
+            registrationRequestValidator.Validate(userModel);
+
             IResponse response;
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
             if(user == null)
