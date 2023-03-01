@@ -57,50 +57,6 @@ namespace PatikaFinalProject.Controllers
         }
 
         
-        [HttpPost("SearchByCategory")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> SearchByCategory(string categoryName)
-        {
-            return await shoppingListService.SearchByCategory(categoryName);
-        }
 
-        [HttpPost("SearchByListName")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> SearchByListName(string listName)
-        {
-            return await shoppingListService.SearchByListName(listName);
-        }
-
-        [OutputCache(Duration = 100)]
-        [HttpPost("FindShoppingListsWithCreationDateAfterThan")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCreationDateAfterThan(DateTime date)
-        {
-            return await shoppingListService.FindShoppingListsWithCreationDateAfterThan(date);
-        }
-
-        [OutputCache(Duration = 100)]
-        [HttpPost("FindShoppingListsWithCreationDateBeforeThan")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCreationDateBeforeThan(DateTime date)
-        {
-            return await shoppingListService.FindShoppingListsWithCreationDateBeforeThan(date);
-        }
-
-        [OutputCache(Duration = 100)]
-        [HttpPost("FindShoppingListsWithCompletionDateAfterThan")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCompletionDateAfterThan(DateTime date)
-        {
-            return await shoppingListService.FindShoppingListsWithCompletionDateAfterThan(date);
-        }
-
-        [OutputCache(Duration = 100)]
-        [HttpPost("FindShoppingListsWithCompletionDateBeforeThan")]
-        [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCompletionDateBeforeThan(DateTime date)
-        {
-            return await shoppingListService.FindShoppingListsWithCompletionDateBeforeThan(date);
-        }
     }
 }
