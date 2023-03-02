@@ -32,9 +32,9 @@ namespace PatikaFinalCase.Controllers
         public ActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
         {
             IResponse<RegistrationRequestModel> userModel = loginService.ValidateCredentials(loginModel);
-            if(userModel.ResponseType == ResponseType.NotFound) 
+            if(userModel.ResponseType != ResponseType.Success) 
             { 
-                return Unauthorized();
+                return Unauthorized(userModel);
             }
             return Ok(loginService.GenerateToken(userModel.Data));
         }
