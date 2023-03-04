@@ -17,4 +17,4 @@ There are 2 user types: Member and Admin. You need to register to be able to int
 Only admin is able to dislay shopping lists which are set to 'completed'\
 Caching is used for search operations.\
 Ms-SQL database magement system is used as database.\
-xUnit framework is used for unit tests.\
+xUnit framework is used for unit tests.
