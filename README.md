@@ -18,4 +18,5 @@ Only admin is able to display shopping lists which are set to 'completed'\
 Both users are allowed to use all of other functionalities.
 Caching is used for search operations.\
 Ms-SQL database magement system is used as database.\
-xUnit framework is used for unit tests.
+xUnit framework is used for unit tests.\
+A simple logger and exception handler middleware is implemented as demo purpose.
