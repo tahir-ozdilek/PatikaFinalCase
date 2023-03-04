@@ -1,2 +1,9 @@
 global using Xunit;
-
+global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
+global using PatikaFinalProject.DataAccess;
+global using PatikaFinalProject.Services.Mapper;
+global using FluentAssertions;
+global using FluentValidation.Results;
+global using PatikaFinalProject.Bussiness.Services;
+global using PatikaFinalProject.Services.Validators;

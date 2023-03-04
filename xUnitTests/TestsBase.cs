@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using PatikaFinalProject.DataAccess;
-using PatikaFinalProject.Services.Mapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace xUnitTests
+﻿namespace xUnitTests
 {
     public class TestsBase
     {

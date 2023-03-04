@@ -1,15 +1,3 @@
-using AutoMapper;
-using FluentAssertions;
-using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using PatikaFinalProject.Bussiness.Services;
-using PatikaFinalProject.DataAccess;
-using PatikaFinalProject.Services.Mapper;
-using PatikaFinalProject.Services.Validators;
-using Xunit.Abstractions;
-
 namespace xUnitTests
 {
     public class LogInTests : TestsBase
@@ -23,11 +11,11 @@ namespace xUnitTests
         
         public static IEnumerable<object[]> InvalidInputList =>  new List<object[]>
                                                                  {
-                                                                        new object[] { "a" , "12345678", "Admin" },
-                                                                        new object[] { "1234567890123456789012345678901", "12345678", "Sdmin" },
-                                                                        new object[] { "aaa", "12345678", "CustomerUserType" },
-                                                                        new object[] { "aaa", "1234567", "Member" },
-                                                                        new object[] { "aaa", "12345678", "admin" }
+                                                                        new object[] { "a" , "123qwe!'^QWE", "Admin" },
+                                                                        new object[] { "1234567890123456789012345678901", "123qwe!'^QWE", "Admin" },
+                                                                        new object[] { "aaa", "123qwe!'^QWE", "CustomerUserType" },
+                                                                        new object[] { "aaa", "12qw!'Q", "Member" },
+                                                                        new object[] { "aaa", "123qwe!'^QWE", "admin" }
                                                                  };
 
         [Theory, MemberData(nameof(InvalidInputList))]
@@ -54,9 +42,9 @@ namespace xUnitTests
 
         public static IEnumerable<object[]> ValidInputList => new List<object[]>
                                                                  {
-                                                                        new object[] { "111" , "12345678", "Admin" },
-                                                                        new object[] { "123456789012345678901234567890", "12345678", "Admin" },
-                                                                        new object[] { "aaa", "12345678901234567890", "Member" },
+                                                                        new object[] { "111" , "123qwe!QWE", "Admin" },
+                                                                        new object[] { "123456789012345678901234567890", "^123qwe!'^QQWE", "Admin" },
+                                                                        new object[] { "aaa", "1!'^+%qweQWE", "Member" },
                                                                  };
 
         [Theory, MemberData(nameof(ValidInputList))]
