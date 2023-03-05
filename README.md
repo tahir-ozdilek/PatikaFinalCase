@@ -3,6 +3,7 @@
 ## .Net Version 7.0
 
 ## Installed Custom Frameworks List
+- AutoMapper 12.0.1
 - Fluent Validation 11.4
 - Fluent Assertions 6.10
 - xUnit 2.42
