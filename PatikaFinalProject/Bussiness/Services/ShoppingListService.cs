@@ -62,7 +62,7 @@ namespace PatikaFinalProject.Bussiness.Services
         public async Task<IResponse> RemoveShoppingList(int id)
         {
             ShoppingList? entityToRemove = dbContext.ShoppingList.Include(x=> x.ProductList).SingleOrDefault(x => x.ID == id);
-            if (entityToRemove != null)
+            if (entityToRemove != null && entityToRemove.ProductList != null)
             {
                 dbContext.RemoveRange(entityToRemove.ProductList);
                 dbContext.Remove(entityToRemove);
@@ -132,12 +132,21 @@ namespace PatikaFinalProject.Bussiness.Services
                 if (updatedEntity != null)
                 {
                     dbContext.Set<ShoppingList>().Entry(updatedEntity).CurrentValues.SetValues(mapper.Map<ShoppingList>(dto));
-                    dbContext.Set<Category>().Entry(updatedEntity.Category).CurrentValues.SetValues(mapper.Map<Category>(dto.Category));
-                    for(int i = 0; i< dto.ProductList.Count; i++)
-                    {
-                        dbContext.Set<Product>().Entry(dbContext.Set<Product>().SingleOrDefault(x=> x.ID == dto.ProductList[i].ID)).CurrentValues.SetValues(mapper.Map<Product>(dto.ProductList[i]));
+                    if(updatedEntity.Category != null) 
+                    { 
+                        dbContext.Set<Category>().Entry(updatedEntity.Category).CurrentValues.SetValues(mapper.Map<Category>(dto.Category));
                     }
-                    
+                    if (dto.ProductList != null)
+                    {
+                        for (int i = 0; i < dto.ProductList.Count; i++)
+                        {
+                            var product = dbContext.Set<Product>().SingleOrDefault(x => x.ID == dto.ProductList[i].ID);
+                            if (product != null)
+                            { 
+                                dbContext.Set<Product>().Entry(product).CurrentValues.SetValues(mapper.Map<Product>(dto.ProductList[i])); 
+                            }
+                        }
+                    }
                     await dbContext.SaveChangesAsync();
                     return new Response<ShoppingListDTO>(ResponseType.Success, dto);
                 }

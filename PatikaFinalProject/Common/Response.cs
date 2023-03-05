@@ -4,9 +4,9 @@ namespace PatikaFinalProject.Common
 {
     public class CustomValidationError
     {
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
-        public string PropertyName { get; set; }
+        public string? PropertyName { get; set; }
 
     }
 
@@ -23,7 +23,7 @@ namespace PatikaFinalProject.Common
             Message = message;
         }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public ResponseType ResponseType { get; set; }
     }
