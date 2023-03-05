@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.SqlServer.Server;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,7 +32,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
             if (!validationResult.IsValid)
             {
-                return new Response<RegistrationRequestModel>(ResponseType.ValidationError, new RegistrationRequestModel(userModel.UserName, userModel.Password, null), createValidationResult(validationResult));
+                return new Response<RegistrationRequestModel>(ResponseType.ValidationError, new RegistrationRequestModel(userModel.UserName, userModel.Password, ""), createValidationResult(validationResult));
             }
 
             byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password + userModel.UserName));
@@ -47,16 +48,20 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public LoginResponseModel GenerateToken(RegistrationRequestModel userModel)
         {
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
+            if(userModel.UserName != null && userModel.UserType != null)
+            { 
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("How much is this static key secure ?"));
 
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+                SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
-            List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
+                List<Claim> claims = new List<Claim>() { new Claim(ClaimTypes.Role, userModel.UserType) };
 
-            JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(1000), signingCredentials: credentials);
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken token = new JwtSecurityToken(issuer: "http://localhost", claims: claims, audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(1000), signingCredentials: credentials);
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
-            return new LoginResponseModel(handler.WriteToken(token), userModel.UserName);
+                return new LoginResponseModel(handler.WriteToken(token), userModel.UserName);
+            }
+            return new LoginResponseModel("", "");
         }
 
         public async Task<IResponse> Register(RegistrationRequestModel userModel)
@@ -65,7 +70,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
             IResponse response;
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
-            if(user == null && validationResult.Errors.Count == 0)
+            if(user == null && validationResult.Errors.Count == 0 && userModel.UserName != null && userModel.UserType != null)
             {
                 byte[] hashedPass = System.Security.Cryptography.SHA512.HashData(Encoding.UTF8.GetBytes(userModel.Password+userModel.UserName));
 
@@ -105,6 +110,12 @@ namespace PatikaFinalProject.Bussiness.Services
     {
         public string UserName { get; set; }
         public string Password { get; set; }
+
+        public LoginRequestModel(string userName, string password)
+        {
+            UserName = userName;
+            Password = password;
+        }
     }
 
     public class LoginResponseModel
@@ -121,9 +132,9 @@ namespace PatikaFinalProject.Bussiness.Services
 
     public class RegistrationRequestModel
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string UserType { get; set; } // Member, Admin
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
+        public string? UserType { get; set; } // Member, Admin
 
         public RegistrationRequestModel() { }
         public RegistrationRequestModel(string userName, string userPassword, string userType)

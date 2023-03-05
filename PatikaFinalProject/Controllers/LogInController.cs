@@ -36,7 +36,14 @@ namespace PatikaFinalCase.Controllers
             { 
                 return Unauthorized(userModel);
             }
-            return Ok(loginService.GenerateToken(userModel.Data));
+            if(userModel.Data != null)
+            {
+                return Ok(loginService.GenerateToken(userModel.Data));
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
