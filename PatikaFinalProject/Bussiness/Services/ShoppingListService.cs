@@ -27,7 +27,7 @@ namespace PatikaFinalProject.Bussiness.Services
             this.shopppingListDTOValidator = DTOValidator;
         }
 
-        public async Task<IResponse<ShoppingListCreateDTO>> CreateShoppingList(ShoppingListCreateDTO dto)
+        public async Task<Response<ShoppingListCreateDTO>> CreateShoppingList(ShoppingListCreateDTO dto)
         {
             ValidationResult validationResult = shoppingListCreateDTOValidator.Validate(dto);
 
@@ -43,7 +43,7 @@ namespace PatikaFinalProject.Bussiness.Services
             }
         }
 
-        public async Task<IResponse<CategoryCreateDTO>> CreateCategory(CategoryCreateDTO dto)
+        public async Task<Response<CategoryCreateDTO>> CreateCategory(CategoryCreateDTO dto)
         {
             CategoryCreateDTOValidator validator = new CategoryCreateDTOValidator();
             ValidationResult validationResult = validator.Validate(dto);
@@ -60,7 +60,7 @@ namespace PatikaFinalProject.Bussiness.Services
             }
         }
 
-        public async Task<IResponse> RemoveShoppingList(int id)
+        public async Task<Response> RemoveShoppingList(int id)
         {
             ShoppingList? entityToRemove = dbContext.ShoppingList.Include(x => x.ProductList).SingleOrDefault(x => x.ID == id);
             if (entityToRemove != null && entityToRemove.ProductList != null)
@@ -73,7 +73,7 @@ namespace PatikaFinalProject.Bussiness.Services
             return new Response(ResponseType.NotFound, "Not Found");
         }
 
-        public async Task<IResponse<List<ShoppingList>>> RemoveCategory(int id)
+        public async Task<Response<List<ShoppingList>>> RemoveCategory(int id)
         {
             List<ShoppingList>? listsContainsReletedCategory = await dbContext.ShoppingList.Include(x => x.Category).Include(x => x.ProductList).Where(x => x.CategoryID == id).ToListAsync();
             if (listsContainsReletedCategory.Count == 0)
@@ -95,7 +95,7 @@ namespace PatikaFinalProject.Bussiness.Services
             }
         }
 
-        public async Task<IResponse<ShoppingListDTO>> GetSingle(int id)
+        public async Task<Response<ShoppingListDTO>> GetSingle(int id)
         {
             ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id && z.isBought == false);
 
@@ -117,7 +117,7 @@ namespace PatikaFinalProject.Bussiness.Services
             return result;
         }
 
-        public async Task<IResponse<List<ShoppingListDTO>>> GetUncompletedAll()
+        public async Task<Response<List<ShoppingListDTO>>> GetUncompletedAll()
         {
             List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Where(z => z.isBought == false).Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
 
@@ -125,7 +125,7 @@ namespace PatikaFinalProject.Bussiness.Services
             return new Response<List<ShoppingListDTO>>(ResponseType.Success, data);
         }
 
-        public async Task<IResponse<List<ShoppingListDTO>>> GetCompletedAll()
+        public async Task<Response<List<ShoppingListDTO>>> GetCompletedAll()
         {
             List<ShoppingList> shoppingList = await dbContext.Set<ShoppingList>().Where(z => z.isBought == true).Include(y => y.Category).Include(x => x.ProductList).ToListAsync();
 
@@ -133,7 +133,7 @@ namespace PatikaFinalProject.Bussiness.Services
             return new Response<List<ShoppingListDTO>>(ResponseType.Success, data);
         }
 
-        public async Task<IResponse<ShoppingListDTO>> UpdateAllInOne(ShoppingListDTO dto)
+        public async Task<Response<ShoppingListDTO>> UpdateAllInOne(ShoppingListDTO dto)
         {
             var result = shopppingListDTOValidator.Validate(dto);
             if (result.IsValid)
@@ -168,7 +168,7 @@ namespace PatikaFinalProject.Bussiness.Services
             }
         }
 
-        public async Task<IResponse<ShoppingListDTO>> UpdateOnlyShoppingList(ShoppingListDTO dto)
+        public async Task<Response<ShoppingListDTO>> UpdateOnlyShoppingList(ShoppingListDTO dto)
         {
             ValidationResult result = shopppingListDTOValidator.Validate(dto);
             

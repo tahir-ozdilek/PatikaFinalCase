@@ -24,14 +24,14 @@ namespace PatikaFinalCase.Controllers
 
         [HttpPost("SearchByCategory")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> SearchByCategory(string categoryName)
+        public async Task<Response> SearchByCategory(string categoryName)
         {
             return await searchService.SearchByCategory(categoryName);
         }
 
         [HttpPost("SearchByListName")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> SearchByListName(string listName)
+        public async Task<Response> SearchByListName(string listName)
         {
             return await searchService.SearchByListName(listName);
         }
@@ -39,7 +39,7 @@ namespace PatikaFinalCase.Controllers
         [OutputCache(Duration = 100)]
         [HttpPost("FindShoppingListsWithCreationDateAfterThan")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCreationDateAfterThan(DateTime date)
+        public async Task<Response> FindShoppingListsWithCreationDateAfterThan(DateTime date)
         {
             return await searchService.FindShoppingListsWithCreationDateAfterThan(date);
         }
@@ -47,7 +47,7 @@ namespace PatikaFinalCase.Controllers
         [OutputCache(Duration = 100)]
         [HttpPost("FindShoppingListsWithCreationDateBeforeThan")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCreationDateBeforeThan(DateTime date)
+        public async Task<Response> FindShoppingListsWithCreationDateBeforeThan(DateTime date)
         {
             return await searchService.FindShoppingListsWithCreationDateBeforeThan(date);
         }
@@ -55,7 +55,7 @@ namespace PatikaFinalCase.Controllers
         [OutputCache(Duration = 100)]
         [HttpPost("FindShoppingListsWithCompletionDateAfterThan")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCompletionDateAfterThan(DateTime date)
+        public async Task<Response> FindShoppingListsWithCompletionDateAfterThan(DateTime date)
         {
             return await searchService.FindShoppingListsWithCompletionDateAfterThan(date);
         }
@@ -63,7 +63,7 @@ namespace PatikaFinalCase.Controllers
         [OutputCache(Duration = 100)]
         [HttpPost("FindShoppingListsWithCompletionDateBeforeThan")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<IResponse> FindShoppingListsWithCompletionDateBeforeThan(DateTime date)
+        public async Task<Response> FindShoppingListsWithCompletionDateBeforeThan(DateTime date)
         {
             return await searchService.FindShoppingListsWithCompletionDateBeforeThan(date);
         }

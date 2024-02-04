@@ -9,8 +9,21 @@ namespace PatikaFinalProject.Common
 
     }
 
-    public class Response : IResponse
+    public enum ResponseType
     {
+        Success,
+        ValidationError,
+        NotFound
+    }
+
+    public class Response
+    {
+        public string? Message { get; set; }
+
+        public ResponseType? ResponseType { get; set; }
+
+        public Response() { }
+
         public Response(ResponseType responseType)
         {
             ResponseType = responseType;
@@ -21,16 +34,16 @@ namespace PatikaFinalProject.Common
             ResponseType = responseType;
             Message = message;
         }
-
-        public string? Message { get; set; }
-
-        public ResponseType ResponseType { get; set; }
     }
 
 
-    public class Response<T> : Response, IResponse<T>
+    public class Response<T> : Response
     {
         public T? Data { get; set; }
+
+        public List<CustomValidationError>? ValidationErrors { get; set; }
+
+        public Response() { }
 
         public Response(ResponseType responseType, T data) : base(responseType)
         {
@@ -47,12 +60,10 @@ namespace PatikaFinalProject.Common
             Data = data;
         }
 
-        public Response(ResponseType responseType, T data, List<CustomValidationError> errors) : base(responseType)
+        public Response(ResponseType responseType, T data, List<CustomValidationError>? errors) : base(responseType)
         {
             ValidationErrors = errors;
             Data = data;
         }
-
-        public List<CustomValidationError>? ValidationErrors { get; set; }
     }
 }

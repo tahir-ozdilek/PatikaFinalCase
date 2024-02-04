@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PatikaFinalCase.Bussiness.Services;
 using PatikaFinalProject.Bussiness.Services;
-using PatikaFinalProject.Controllers;
 using PatikaFinalProject.DataAccess;
 using PatikaFinalProject.Services.Mapper;
 using PatikaFinalProject.Services.Validators;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace PatikaFinalProject.Common
 {
@@ -21,9 +17,11 @@ namespace PatikaFinalProject.Common
     {
         public static void AddDependencies(this IServiceCollection services)
         {
-            services.AddControllers()
+            services.AddControllers().AddNewtonsoftJson();
+
+            /*services.AddControllers()
             .AddJsonOptions(o => o.JsonSerializerOptions
-                .ReferenceHandler = ReferenceHandler.IgnoreCycles);
+                .ReferenceHandler = ReferenceHandler.IgnoreCycles);*/
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo

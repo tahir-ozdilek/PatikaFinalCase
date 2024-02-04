@@ -1,6 +1,5 @@
 using Client.Controllers;
 using Refit;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Client
 {
@@ -13,7 +12,9 @@ namespace Client
             // Add services to the container.
             builder.Services.AddRefitClient<RefitApi>().ConfigureHttpClient(c => c.BaseAddress = new Uri("http://localhost:5122"));
 
-            builder.Services.AddControllers();
+            //builder.Services.AddControllers().AddNewtonsoftJson();
+
+            builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

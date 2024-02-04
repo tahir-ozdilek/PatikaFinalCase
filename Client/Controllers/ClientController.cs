@@ -29,7 +29,7 @@ namespace Client.Controllers
 
 
         [HttpGet("GetwithRefit")]
-        public async Task<dynamic> GetwithRefit()
+        public async Task<Response<List<ShoppingListDTO>>> GetwithRefit()
         {
             var refitClient = RestService.For<RefitApi>("http://localhost:5122");
 
@@ -42,6 +42,6 @@ namespace Client.Controllers
     public interface RefitApi
     {
         [Get("/ShoppingList/GetAllCompletedShoppingLists")]
-        Task<dynamic> GetShoppingList();
+        Task<Response<List<ShoppingListDTO>>> GetShoppingList();
     }
 }

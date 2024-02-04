@@ -26,7 +26,7 @@ namespace PatikaFinalProject.Bussiness.Services
             this.registrationRequestValidator = registrationRequestValidator;
         }
 
-        public IResponse<RegistrationRequestModel> ValidateCredentials(LoginRequestModel userModel)
+        public Response<RegistrationRequestModel> ValidateCredentials(LoginRequestModel userModel)
         {
             ValidationResult validationResult = loginRequestValidator.Validate(userModel);
 
@@ -64,11 +64,11 @@ namespace PatikaFinalProject.Bussiness.Services
             return new LoginResponseModel("", "");
         }
 
-        public async Task<IResponse> Register(RegistrationRequestModel userModel)
+        public async Task<Response> Register(RegistrationRequestModel userModel)
         {
             ValidationResult validationResult = registrationRequestValidator.Validate(userModel);
 
-            IResponse response;
+            Response response;
             User? user = dbContext.Set<User>().SingleOrDefault(x => x.UserName == userModel.UserName);
             if(user == null && validationResult.Errors.Count == 0 && userModel.UserName != null && userModel.UserType != null)
             {

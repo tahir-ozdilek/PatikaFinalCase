@@ -22,7 +22,7 @@ namespace PatikaFinalCase.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<IResponse> Register(RegistrationRequestModel loginModel)
+        public async Task<Response> Register(RegistrationRequestModel loginModel)
         {
             return await loginService.Register(loginModel); 
         }
@@ -31,7 +31,7 @@ namespace PatikaFinalCase.Controllers
         [HttpPost("LogIn")]
         public ActionResult<LoginResponseModel> LogIn(LoginRequestModel loginModel)
         {
-            IResponse<RegistrationRequestModel> userModel = loginService.ValidateCredentials(loginModel);
+            Response<RegistrationRequestModel> userModel = loginService.ValidateCredentials(loginModel);
             if(userModel.ResponseType != ResponseType.Success) 
             { 
                 return Unauthorized(userModel);
