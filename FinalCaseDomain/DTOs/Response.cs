@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-
+﻿
 namespace PatikaFinalProject.Common
 {
     public class CustomValidationError

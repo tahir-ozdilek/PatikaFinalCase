@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatikaFinalCase", "PatikaFi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnitTests", "xUnitTests\xUnitTests.csproj", "{A08A12DA-3A99-4BE9-9708-55C7409CB1A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{DA1C7149-50CF-4CA4-B7A6-D28233F63D4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalCaseDomain", "FinalCaseDomain\FinalCaseDomain.csproj", "{F93F8AA9-266A-413F-A8B4-A09064ACED01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A08A12DA-3A99-4BE9-9708-55C7409CB1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08A12DA-3A99-4BE9-9708-55C7409CB1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A08A12DA-3A99-4BE9-9708-55C7409CB1A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA1C7149-50CF-4CA4-B7A6-D28233F63D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA1C7149-50CF-4CA4-B7A6-D28233F63D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA1C7149-50CF-4CA4-B7A6-D28233F63D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA1C7149-50CF-4CA4-B7A6-D28233F63D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93F8AA9-266A-413F-A8B4-A09064ACED01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93F8AA9-266A-413F-A8B4-A09064ACED01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93F8AA9-266A-413F-A8B4-A09064ACED01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93F8AA9-266A-413F-A8B4-A09064ACED01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

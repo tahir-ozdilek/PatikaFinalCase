@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DevExtreme.AspNet.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using PatikaFinalProject.Bussiness.Services;
 using PatikaFinalProject.Common;
 using PatikaFinalProject.DataAccess;
@@ -70,6 +72,7 @@ namespace PatikaFinalProject.Controllers
             return await shoppingListService.GetSingle(id);
         }
 
+        
         [HttpGet("GetAllUncompletedShoppingLists")]
         [Authorize(Roles = "Member, Admin")]
         public async Task<IResponse> GetAllUncompletedShoppingLists( )
@@ -78,10 +81,17 @@ namespace PatikaFinalProject.Controllers
         }
 
         [HttpGet("GetAllCompletedShoppingLists")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IResponse> GetAllCompletedShoppingLists()
         {
             return await shoppingListService.GetCompletedAll();
+        }
+
+        [HttpGet("GetWithDevExFilters")]
+        [Authorize(Roles = "Member, Admin")]
+        public async Task<object> GetWithDevExFilters([FromQuery] DataSourceLoadOptionsBase options)
+        {
+            return await shoppingListService.GetWithDevExFilters(options);
         }
     }
 }

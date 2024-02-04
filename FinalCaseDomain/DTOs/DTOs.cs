@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.SqlTypes;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatikaFinalProject.DataAccess
 {

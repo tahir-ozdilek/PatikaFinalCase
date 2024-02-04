@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevExtreme.AspNet.Data;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +62,7 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse> RemoveShoppingList(int id)
         {
-            ShoppingList? entityToRemove = dbContext.ShoppingList.Include(x=> x.ProductList).SingleOrDefault(x => x.ID == id);
+            ShoppingList? entityToRemove = dbContext.ShoppingList.Include(x => x.ProductList).SingleOrDefault(x => x.ID == id);
             if (entityToRemove != null && entityToRemove.ProductList != null)
             {
                 dbContext.RemoveRange(entityToRemove.ProductList);
@@ -74,14 +75,14 @@ namespace PatikaFinalProject.Bussiness.Services
 
         public async Task<IResponse<List<ShoppingList>>> RemoveCategory(int id)
         {
-            List<ShoppingList>? listsContainsReletedCategory = await dbContext.ShoppingList.Include(x=> x.Category).Include(x=>x.ProductList).Where(x => x.CategoryID == id).ToListAsync();
-            if(listsContainsReletedCategory.Count == 0) 
-            { 
+            List<ShoppingList>? listsContainsReletedCategory = await dbContext.ShoppingList.Include(x => x.Category).Include(x => x.ProductList).Where(x => x.CategoryID == id).ToListAsync();
+            if (listsContainsReletedCategory.Count == 0)
+            {
                 Category? entityToRemove = dbContext.Category.SingleOrDefault(x => x.ID == id);
                 if (entityToRemove != null)
                 {
                     EntityEntry<Category> a = dbContext.Remove(entityToRemove);
-                
+
                     await dbContext.SaveChangesAsync();
                     return new Response<List<ShoppingList>>(ResponseType.Success, "Successfully removed.");
                 }
@@ -98,13 +99,22 @@ namespace PatikaFinalProject.Bussiness.Services
         {
             ShoppingList? shoppingList = await dbContext.ShoppingList.Include(x => x.Category).Include(y => y.ProductList).SingleOrDefaultAsync(z => z.ID == id && z.isBought == false);
 
-            if(shoppingList == null)
+            if (shoppingList == null)
             {
                 new Response<ShoppingListDTO>(ResponseType.NotFound, "Not Found");
             }
 
             ShoppingListDTO data = mapper.Map<ShoppingListDTO>(shoppingList);
             return new Response<ShoppingListDTO>(ResponseType.Success, data);
+        }
+
+        public async Task<object> GetWithDevExFilters(DataSourceLoadOptionsBase options)
+        {
+            IQueryable<ShoppingList> query = dbContext.ShoppingList;
+
+            var result = await DataSourceLoader.LoadAsync<ShoppingList>(query, options);
+
+            return result;
         }
 
         public async Task<IResponse<List<ShoppingListDTO>>> GetUncompletedAll()
